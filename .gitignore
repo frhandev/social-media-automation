@@ -1,0 +1,86 @@
+# ==============================
+# Environment variables
+# ==============================
+
+.env
+.env.*
+!.env.example
+
+
+# ==============================
+# Node / Next.js
+# ==============================
+
+node_modules/
+.next/
+out/
+dist/
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# ==============================
+# .NET
+# ==============================
+
+bin/
+obj/
+
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+
+# ==============================
+# IDEs
+# ==============================
+
+.vs/
+.vscode/
+.idea/
+
+
+# ==============================
+# Operating System
+# ==============================
+
+.DS_Store
+Thumbs.db
+
+
+# ==============================
+# Logs
+# ==============================
+
+*.log
+logs/
+
+
+# ==============================
+# Local uploads / temporary files
+# ==============================
+
+uploads/
+temp/
+tmp/
+
+
+# ==============================
+# Secrets / Certificates
+# ==============================
+
+*.pfx
+*.p12
+*.pem
+*.key
+
+
+# ==============================
+# Docker local overrides
+# ==============================
+
+docker-compose.override.yml
