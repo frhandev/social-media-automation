@@ -1,9 +1,9 @@
-function SocailAccounts() {
+function SocialAccounts() {
   return (
     <div>
-      <h1>SocailAccounts</h1>
+      <h1>SocialAccounts</h1>
     </div>
   );
 }
 
-export default SocailAccounts;
+export default SocialAccounts;

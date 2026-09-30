@@ -156,7 +156,7 @@ function Dashboard() {
                 const Icon = ACTIVITY_ICON[item.tone];
                 return (
                   <li key={item.id} className="relative">
-                    <span className="absolute -left-[1.6875rem] top-0.5 flex size-4 items-center justify-center rounded-full bg-background">
+                    <span className="absolute -left-6.75 top-0.5 flex size-4 items-center justify-center rounded-full bg-background">
                       <Icon className={cn("size-3.5", ACTIVITY_TONE[item.tone])} aria-hidden />
                     </span>
                     <p className="text-sm font-medium leading-snug">{item.message}</p>
