@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Job Board",
-  description: "Job Board AI Interview Assistant",
+  title: "SocialFlow AI",
+  description:
+    "AI-assisted multi-platform social media content management and automation system.",
 };
 
 export default function RootLayout({
