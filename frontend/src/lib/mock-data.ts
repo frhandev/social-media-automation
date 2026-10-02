@@ -2,16 +2,16 @@ import type { Platform } from "@/components/layout/PlatformBadge";
 import type { PostStatus } from "@/components/layout/StatusBadge";
 
 export const workspace = {
-  name: "Ferhan Studio",
+  name: "Demo Workspace",
   plan: "Pro",
-  others: ["Ferhan Dev", "Client — Northwind"],
+  others: ["Content Team", "Client Workspace"],
 };
 
 export const user = {
-  name: "Demo Workspace",
+  name: "Alex",
   fullName: "Alex Morgan",
   email: "alex@example.com",
-  initials: "FY",
+  initials: "AM",
 };
 
 export const metrics = {

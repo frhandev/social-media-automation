@@ -1,17 +1,16 @@
 import { Music2 } from "lucide-react";
-import { FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
+import { FaInstagram, FaYoutube } from "react-icons/fa";
 import type { IconType } from "react-icons";
 
 
 import { cn } from "@/lib/utils";
 
-export type Platform = "youtube" | "tiktok" | "instagram" | "linkedin";
+export type Platform = "youtube" | "tiktok" | "instagram";
 
 export const PLATFORMS: Record<Platform, { label: string; icon: IconType }> = {
   youtube: { label: "YouTube", icon: FaYoutube },
   tiktok: { label: "TikTok", icon: Music2 },
   instagram: { label: "Instagram", icon: FaInstagram },
-  linkedin: { label: "LinkedIn", icon: FaLinkedin },
 };
 
 export function PlatformBadge({
