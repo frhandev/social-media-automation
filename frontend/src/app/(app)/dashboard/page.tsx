@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { activity, channels, metrics, upcoming, user } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 
 const TILE: Record<string, string> = {
@@ -40,8 +41,15 @@ function Dashboard() {
         title={`Good morning, ${user.name}.`}
         description="Here's what's happening with your content."
         action={
-          <Button variant="brutal" size="lg" className="w-full sm:w-auto">
-            <Plus className="size-4" /> Create post
+          <Button
+            variant="brutal"
+            size="lg"
+            className="w-full sm:w-auto"
+            asChild
+          >
+            <Link href="/posts/new">
+              <Plus className="size-4" /> Create post
+            </Link>
           </Button>
         }
       />
@@ -63,8 +71,10 @@ function Dashboard() {
           <section>
             <div className="mb-4 flex items-baseline justify-between border-b border-border pb-3">
               <h2 className="editorial text-xl">Upcoming content</h2>
-              <Button variant="link" size="sm">
-                View calendar <ArrowUpRight className="size-3.5" />
+              <Button variant="link" size="sm" asChild>
+                <Link href="/calendar">
+                  View calendar <ArrowUpRight className="size-3.5" />
+                </Link>
               </Button>
             </div>
             <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">

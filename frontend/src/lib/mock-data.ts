@@ -8,9 +8,9 @@ export const workspace = {
 };
 
 export const user = {
-  name: "Ferhan",
-  fullName: "Muhammed Ferhan",
-  email: "ferhan@ferhanstudio.com",
+  name: "Demo Workspace",
+  fullName: "Alex Morgan",
+  email: "alex@example.com",
   initials: "FY",
 };
 
