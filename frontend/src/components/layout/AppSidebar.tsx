@@ -141,8 +141,8 @@ export function SidebarNav() {
 
 export function AppSidebar() {
   return (
-    <aside className="hidden w-[250px] shrink-0 border-r border-sidebar-border lg:block">
-      <div className="fixed inset-y-0 left-0 w-[250px] border-r border-sidebar-border">
+    <aside className="hidden w-62.5 shrink-0 border-r border-sidebar-border lg:block">
+      <div className="fixed inset-y-0 left-0 w-62.5 border-r border-sidebar-border">
         <SidebarNav />
       </div>
     </aside>
