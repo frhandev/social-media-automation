@@ -1,9 +1,4 @@
-function Media() {
-  return (
-    <div>
-      <h1>Media</h1>
-    </div>
-  );
+import MediaLibrary from "@/components/Media/media-library";
+export default function Media() {
+  return <MediaLibrary />;
 }
-
-export default Media;

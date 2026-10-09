@@ -4,8 +4,7 @@ import type { IconType } from "react-icons";
 
 
 import { cn } from "@/lib/utils";
-
-export type Platform = "youtube" | "tiktok" | "instagram";
+import { Platform } from "@/types/platform/Platform";
 
 export const PLATFORMS: Record<Platform, { label: string; icon: IconType }> = {
   youtube: { label: "YouTube", icon: FaYoutube },

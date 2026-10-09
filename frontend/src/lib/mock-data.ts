@@ -1,5 +1,6 @@
-import type { Platform } from "@/components/layout/PlatformBadge";
-import type { PostStatus } from "@/components/layout/StatusBadge";
+import MediaItem from "@/types/media/MediaItem";
+import { Platform } from "@/types/platform/Platform";
+import { PostStatus } from "@/types/post/PostStatus";
 
 export const workspace = {
   name: "Demo Workspace",
@@ -29,9 +30,9 @@ export type Channel = {
 };
 
 export const channels: Channel[] = [
-  { platform: "youtube", handle: "Ferhan Dev", connected: true },
+  { platform: "youtube", handle: "Demo Channel", connected: true },
   { platform: "tiktok", connected: false },
-  { platform: "instagram", handle: "Ferhan Studio", connected: true },
+  { platform: "instagram", handle: "Demo Studio", connected: true },
 ];
 
 export type UpcomingPost = {
@@ -132,23 +133,7 @@ export const activity: Activity[] = [
 ];
 
 // ---------- Media Library (Phase 2) ----------
-export type MediaType = "video" | "image";
-export type MediaStatus = "uploading" | "processing" | "ready" | "failed";
 
-export type MediaItem = {
-  id: string;
-  filename: string;
-  type: MediaType;
-  format: string;
-  durationSec?: number | undefined;
-  width: number;
-  height: number;
-  sizeBytes: number;
-  uploadedAt: string; // ISO
-  status: MediaStatus;
-  progress?: number | undefined;
-  tone: "lime" | "ink" | "indigo" | "sand";
-};
 
 export const mediaItems: MediaItem[] = [
   { id: "m1", filename: "backend-tips.mp4", type: "video", format: "MP4", durationSec: 58, width: 1080, height: 1920, sizeBytes: 48_200_000, uploadedAt: "2026-09-29T14:20:00Z", status: "ready", tone: "ink" },
