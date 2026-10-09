@@ -1,6 +1,6 @@
-import type { Platform } from "@/components/layout/PlatformBadge";
-import type { PostStatus } from "@/components/layout/StatusBadge";
 import MediaItem from "@/types/media/MediaItem";
+import { Platform } from "@/types/platform/Platform";
+import { PostStatus } from "@/types/post/PostStatus";
 
 export const workspace = {
   name: "Demo Workspace",
@@ -30,9 +30,9 @@ export type Channel = {
 };
 
 export const channels: Channel[] = [
-  { platform: "youtube", handle: "Ferhan Dev", connected: true },
+  { platform: "youtube", handle: "Demo Channel", connected: true },
   { platform: "tiktok", connected: false },
-  { platform: "instagram", handle: "Ferhan Studio", connected: true },
+  { platform: "instagram", handle: "Demo Studio", connected: true },
 ];
 
 export type UpcomingPost = {

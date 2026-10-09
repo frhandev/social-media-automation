@@ -15,8 +15,7 @@ function UploadArea({
   const input = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
   const accept = (files: File[]) => {
-    console.log("File uploaded successfully!");
-    // upload(files);
+    console.log("Media upload will be available after backend integration.");
     if (files.length) onDone?.();
   };
   return (

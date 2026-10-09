@@ -1,4 +1,4 @@
-import MediaStatus from "./MediaStatus";
+import {MediaStatus} from "./MediaStatus";
 import MediaType from "./MediaType";
 
 type MediaItem = {
