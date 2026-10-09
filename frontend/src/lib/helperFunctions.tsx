@@ -1,12 +1,20 @@
 export function formatDate(
   value?: string,
   includeTime = false,
+  includeYear = false,
 ) {
   if (!value) return "—";
+
   return new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/Istanbul",
     day: "numeric",
     month: "short",
-    ...(includeTime ? { hour: "2-digit", minute: "2-digit" } : {}),
+    ...(includeYear && { year: "numeric" }),
+    ...(includeTime && {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }),
   }).format(new Date(value));
 }
 

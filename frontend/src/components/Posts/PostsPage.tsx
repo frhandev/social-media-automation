@@ -17,7 +17,9 @@ export function PostsPage() {
   const f = useFilters();
   const rows = posts.filter(
     (p) =>
-      p.title.toLowerCase().includes(f.search.toLowerCase()) &&
+      [p.title, p.excerpt].some((text) =>
+        text.toLowerCase().includes(f.search.trim().toLowerCase()),
+      ) &&
       (f.status === "all" || p.status === f.status) &&
       (f.platform === "all" || p.platforms.includes(f.platform as Platform)) &&
       (!f.date || dateKey(p.createdAt) === f.date),
