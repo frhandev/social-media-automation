@@ -1,16 +1,19 @@
 import { Badge } from "@/components/ui/badge";
+import { MediaStatus } from "@/types/media/MediaStatus";
+import { PostStatus } from "@/types/post/PostStatus";
 
-export type PostStatus =
-  | "draft"
-  | "scheduled"
-  | "published"
-  | "failed"
-  | "connected"
-  | "not_connected";
+export type BadgeStatus = PostStatus | MediaStatus;
+
+type BadgeVariant =
+  | "default"
+  | "info"
+  | "success"
+  | "destructive"
+  | "outline";
 
 const MAP: Record<
-  PostStatus,
-  { label: string; variant: "default" | "info" | "success" | "destructive" | "outline" }
+  BadgeStatus,
+  { label: string; variant: BadgeVariant }
 > = {
   draft: { label: "Draft", variant: "default" },
   scheduled: { label: "Scheduled", variant: "info" },
@@ -18,9 +21,12 @@ const MAP: Record<
   failed: { label: "Failed", variant: "destructive" },
   connected: { label: "Connected", variant: "success" },
   not_connected: { label: "Not connected", variant: "outline" },
+  uploading: { label: "Uploading", variant: "info" },
+  processing: { label: "Processing", variant: "info" },
+  ready: { label: "Ready", variant: "success" },
 };
 
-export function StatusBadge({ status }: { status: PostStatus }) {
+export function StatusBadge({ status }: { status: BadgeStatus }) {
   const { label, variant } = MAP[status];
   return <Badge variant={variant}>{label}</Badge>;
 }
