@@ -1,9 +1,2 @@
-function Posts() {
-  return (
-    <div>
-      <h1>Posts</h1>
-    </div>
-  );
-}
-
-export default Posts;
+import { PostsPage } from "@/components/Posts/PostsPage";
+export default PostsPage;
