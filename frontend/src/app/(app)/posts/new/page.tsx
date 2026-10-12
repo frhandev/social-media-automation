@@ -1,5 +1,4 @@
-function CreatePostPage() {
-  return <h1>Create Post Page</h1>;
+import PostComposer from "@/components/Posts/PostComposer";
+export default function CreatePost() {
+  return <PostComposer />;
 }
-
-export default CreatePostPage;
