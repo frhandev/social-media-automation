@@ -1,5 +1,5 @@
-function CreatePostPage() {
-  return <h1>Create Post Page</h1>;
-}
+import CreatePostWizard from "@/components/Posts/create/CreatePostWizard";
 
-export default CreatePostPage;
+export default function CreatePostPage() {
+  return <CreatePostWizard />;
+}

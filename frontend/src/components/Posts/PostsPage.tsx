@@ -15,14 +15,18 @@ import { Platform } from "@/types/platform/Platform";
 
 export function PostsPage() {
   const f = useFilters();
+
+  const query = f.search.trim().toLowerCase();
+
   const rows = posts.filter(
-    (p) =>
-      [p.title, p.excerpt].some((text) =>
-        text.toLowerCase().includes(f.search.trim().toLowerCase()),
+    (post) =>
+      [post.title, post.excerpt].some((value) =>
+        value.toLowerCase().includes(query),
       ) &&
-      (f.status === "all" || p.status === f.status) &&
-      (f.platform === "all" || p.platforms.includes(f.platform as Platform)) &&
-      (!f.date || dateKey(p.createdAt) === f.date),
+      (f.status === "all" || post.status === f.status) &&
+      (f.platform === "all" ||
+        post.platforms.includes(f.platform as Platform)) &&
+      (!f.date || dateKey(post.createdAt) === f.date),
   );
 
   return (
