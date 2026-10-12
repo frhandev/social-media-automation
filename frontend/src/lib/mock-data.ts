@@ -25,17 +25,23 @@ export const metrics = {
   failed: 3,
 };
 
+export const platformAccounts: PlatformAccount[] = [
+  { platform: "youtube", account: "Ferhan Dev", connected: true },
+  { platform: "tiktok", account: "Ferhan TikTok", connected: true },
+  { platform: "instagram", connected: false },
+];
+
 export type Channel = {
   platform: Platform;
   handle?: string;
   connected: boolean;
 };
 
-export const channels: Channel[] = [
-  { platform: "youtube", handle: "Demo Channel", connected: true },
-  { platform: "tiktok", connected: false },
-  { platform: "instagram", handle: "Demo Studio", connected: true },
-];
+export const channels: Channel[] = platformAccounts.map((account) => ({
+  platform: account.platform,
+  connected: account.connected,
+  handle: account.account,
+}));
 
 export type UpcomingPost = {
   id: string;
@@ -293,10 +299,4 @@ export const posts: PostRow[] = [
     status: "cancelled",
     mediaId: "m3",
   },
-];
-
-export const platformAccounts: PlatformAccount[] = [
-  { platform: "youtube", account: "Ferhan Dev", connected: true },
-  { platform: "tiktok", account: "Ferhan TikTok", connected: true },
-  { platform: "instagram", connected: false },
 ];

@@ -1,4 +1,5 @@
-import PostComposer from "@/components/Posts/PostComposer";
-export default function CreatePost() {
-  return <PostComposer />;
+import CreatePostWizard from "@/components/Posts/create/CreatePostWizard";
+
+export default function CreatePostPage() {
+  return <CreatePostWizard />;
 }
