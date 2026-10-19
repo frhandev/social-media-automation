@@ -1,38 +1,39 @@
-import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const STEPS = ["Media", "Platforms", "Content", "Review", "Publish"] as const;
 
-type WizardSteps = 1 | 2;
+export type WizardStep = 1 | 2 | 3;
 
-type WizardPropsType = {
-  step: WizardSteps;
-  onStepChange: (step: WizardSteps) => void;
+type Props = {
+  step: WizardStep;
+  onStepChange: (step: WizardStep) => void;
 };
 
-function WizardStepper({ step, onStepChange }: WizardPropsType) {
+export default function WizardStepper({ step, onStepChange }: Props) {
   return (
     <nav className="wizard-steps" aria-label="Create post steps">
       {STEPS.map((label, index) => {
         const number = index + 1;
-        const isActive = step === number;
+
+        const isActive = number === step;
         const isComplete = number < step;
-        const isEnabeled = number <= step && number <= 2;
+        const isAvailable = number <= step && number <= 3;
 
         return (
           <button
             key={label}
             type="button"
-            disabled={!isEnabeled}
+            disabled={!isAvailable}
             aria-current={isActive ? "step" : undefined}
             className={cn(
               "wizard-step",
               isActive && "active",
               isComplete && "complete",
-              number > 2 && "opacity-40",
+              number > 3 && "opacity-40",
             )}
             onClick={() => {
-              if (number === 1 || number === 2) {
+              if (number === 1 || number === 2 || number === 3) {
                 onStepChange(number);
               }
             }}
@@ -45,5 +46,3 @@ function WizardStepper({ step, onStepChange }: WizardPropsType) {
     </nav>
   );
 }
-
-export default WizardStepper;
