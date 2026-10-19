@@ -23,6 +23,9 @@ import PlatformSelectionStep from "./PlatformSelectionStep";
 import ContentStep from "./ContentStep";
 import ReviewStep from "./ReviewStep";
 
+import PublishingStep from "./PublishingStep";
+import { PublishingMode } from "@/types/post/PublishingMode";
+
 const EMPTY_CONTENT: Content = {
   title: "",
   body: "",
@@ -33,14 +36,23 @@ const EMPTY_CONTENT: Content = {
 export default function CreatePostWizard() {
   const [step, setStep] = useState<WizardStep>(1);
 
+  // Step 1: Media
   const [mediaId, setMediaId] = useState("");
 
+  // Step 2: Platforms
   const [platforms, setPlatforms] = useState<Platform[]>([]);
 
+  // Step 3: Platform-specific content
   const [contents, setContents] = useState<PlatformContent>({});
 
-  const [error, setError] = useState("");
+  // Step 5: Publishing
+  const [publishingMode, setPublishingMode] = useState<PublishingMode>("now");
 
+  const [scheduledDate, setScheduledDate] = useState("");
+  const [scheduledTime, setScheduledTime] = useState("");
+
+  // Wizard validation
+  const [error, setError] = useState("");
   const [showValidation, setShowValidation] = useState(false);
 
   function goToStep(target: WizardStep) {
@@ -51,9 +63,7 @@ export default function CreatePostWizard() {
   function selectMedia(id: string) {
     const media = mediaItems.find((item) => item.id === id);
 
-    if (id && media?.status !== "ready") {
-      return;
-    }
+    if (id && media?.status !== "ready") return;
 
     setMediaId(id);
     setError("");
@@ -62,9 +72,7 @@ export default function CreatePostWizard() {
   function togglePlatform(platform: Platform) {
     const account = platformAccounts.find((item) => item.platform === platform);
 
-    if (!account?.connected) {
-      return;
-    }
+    if (!account?.connected) return;
 
     setPlatforms((previous) =>
       previous.includes(platform)
@@ -72,8 +80,7 @@ export default function CreatePostWizard() {
         : [...previous, platform],
     );
 
-    // Keep previously written platform content.
-    // Only update the selected platforms.
+    // Keep previously written content in state.
     setError("");
   }
 
@@ -90,12 +97,29 @@ export default function CreatePostWizard() {
     setError("");
   }
 
+  function isMediaValid() {
+    return mediaItems.find((item) => item.id === mediaId)?.status === "ready";
+  }
+
+  function arePlatformsValid() {
+    return (
+      platforms.length > 0 &&
+      platforms.every(
+        (platform) =>
+          platformAccounts.find((account) => account.platform === platform)
+            ?.connected === true,
+      )
+    );
+  }
+
+  function isContentValid() {
+    return validateAllPlatformContents(platforms, contents);
+  }
+
   function nextStep() {
     // Step 1 -> Step 2
     if (step === 1) {
-      const media = mediaItems.find((item) => item.id === mediaId);
-
-      if (media?.status !== "ready") {
+      if (!isMediaValid()) {
         setError("Select a ready media asset to continue.");
         return;
       }
@@ -106,19 +130,8 @@ export default function CreatePostWizard() {
 
     // Step 2 -> Step 3
     if (step === 2) {
-      if (platforms.length === 0) {
+      if (!arePlatformsValid()) {
         setError("Select at least one connected platform.");
-        return;
-      }
-
-      const allConnected = platforms.every(
-        (platform) =>
-          platformAccounts.find((account) => account.platform === platform)
-            ?.connected === true,
-      );
-
-      if (!allConnected) {
-        setError("One or more selected platforms are not connected.");
         return;
       }
 
@@ -128,9 +141,7 @@ export default function CreatePostWizard() {
 
     // Step 3 -> Step 4
     if (step === 3) {
-      const isValid = validateAllPlatformContents(platforms, contents);
-
-      if (!isValid) {
+      if (!isContentValid()) {
         setShowValidation(true);
         setError("Complete the required content for all selected platforms.");
         return;
@@ -138,13 +149,48 @@ export default function CreatePostWizard() {
 
       setShowValidation(false);
       goToStep(4);
+      return;
     }
+
+    // Step 4 -> Step 5
+    // Revalidate all previous steps.
+    if (step === 4) {
+      if (!isMediaValid()) {
+        goToStep(1);
+        setError(
+          "The selected media is no longer ready. Choose a ready asset.",
+        );
+        return;
+      }
+
+      if (!arePlatformsValid()) {
+        goToStep(2);
+        setError(
+          "Review your selected platforms. At least one connected account is required.",
+        );
+        return;
+      }
+
+      if (!isContentValid()) {
+        setShowValidation(true);
+        goToStep(3);
+        setError("Complete the required content for all selected platforms.");
+        return;
+      }
+
+      setShowValidation(false);
+      goToStep(5);
+      return;
+    }
+
+    // Step 5 has no execution action in TASK #13.
   }
 
   function previousStep() {
     if (step === 1) return;
 
-    const previous: WizardStep = step === 4 ? 3 : step === 3 ? 2 : 1;
+    const previous: WizardStep =
+      step === 5 ? 4 : step === 4 ? 3 : step === 3 ? 2 : 1;
 
     goToStep(previous);
   }
@@ -160,6 +206,7 @@ export default function CreatePostWizard() {
       <WizardStepper
         step={step}
         onStepChange={(target) => {
+          // Allow navigation backward only.
           if (target <= step) {
             goToStep(target);
           }
@@ -168,10 +215,12 @@ export default function CreatePostWizard() {
 
       <p className="text-xs text-subtle">Step {step} of 5</p>
 
+      {/* Step 1 */}
       {step === 1 && (
         <MediaSelectionStep mediaId={mediaId} onSelect={selectMedia} />
       )}
 
+      {/* Step 2 */}
       {step === 2 && (
         <PlatformSelectionStep
           platforms={platforms}
@@ -179,6 +228,7 @@ export default function CreatePostWizard() {
         />
       )}
 
+      {/* Step 3 */}
       {step === 3 && (
         <ContentStep
           platforms={platforms}
@@ -189,6 +239,7 @@ export default function CreatePostWizard() {
         />
       )}
 
+      {/* Step 4 */}
       {step === 4 && (
         <ReviewStep
           mediaId={mediaId}
@@ -197,6 +248,20 @@ export default function CreatePostWizard() {
           onEditMedia={() => goToStep(1)}
           onEditPlatforms={() => goToStep(2)}
           onEditContent={() => goToStep(3)}
+        />
+      )}
+
+      {/* Step 5 */}
+      {step === 5 && (
+        <PublishingStep
+          mode={publishingMode}
+          onModeChange={setPublishingMode}
+          scheduledDate={scheduledDate}
+          onDateChange={setScheduledDate}
+          scheduledTime={scheduledTime}
+          onTimeChange={setScheduledTime}
+          mediaId={mediaId}
+          platforms={platforms}
         />
       )}
 
@@ -221,9 +286,9 @@ export default function CreatePostWizard() {
           </Button>
         )}
 
-        {step === 4 ? (
+        {step === 5 ? (
           <Button type="button" variant="brutal" size="lg" disabled>
-            Publish — next task
+            Publishing — backend required
             <ArrowRight size={16} />
           </Button>
         ) : (
@@ -232,7 +297,9 @@ export default function CreatePostWizard() {
               ? "Select & continue"
               : step === 2
                 ? "Continue to content"
-                : "Continue to review"}
+                : step === 3
+                  ? "Continue to review"
+                  : "Continue to publishing"}
 
             <ArrowRight size={16} />
           </Button>
