@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 const STEPS = ["Media", "Platforms", "Content", "Review", "Publish"] as const;
 
-export type WizardStep = 1 | 2 | 3 | 4;
+export type WizardStep = 1 | 2 | 3 | 4 | 5;
 
 type Props = {
   step: WizardStep;
@@ -18,8 +18,7 @@ export default function WizardStepper({ step, onStepChange }: Props) {
 
         const isActive = number === step;
         const isComplete = number < step;
-
-        const isAvailable = number <= step && number <= 4;
+        const isAvailable = number <= step;
 
         return (
           <button
@@ -31,14 +30,15 @@ export default function WizardStepper({ step, onStepChange }: Props) {
               "wizard-step",
               isActive && "active",
               isComplete && "complete",
-              number === 5 && "opacity-40",
+              !isAvailable && "opacity-40",
             )}
             onClick={() => {
               if (
                 number === 1 ||
                 number === 2 ||
                 number === 3 ||
-                number === 4
+                number === 4 ||
+                number === 5
               ) {
                 onStepChange(number);
               }
