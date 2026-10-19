@@ -22,6 +22,7 @@ type Props = {
   mediaId: string;
   contents: PlatformContent;
   onContentChange: (platform: Platform, fields: Partial<Content>) => void;
+  showValidation: boolean;
 };
 
 const EMPTY_CONTENT: Content = {
@@ -31,12 +32,20 @@ const EMPTY_CONTENT: Content = {
   cta: "",
 };
 
-function ContentStep({ platforms, mediaId, contents, onContentChange }: Props) {
+function ContentStep({
+  platforms,
+  mediaId,
+  contents,
+  onContentChange,
+  showValidation,
+}: Props) {
   const [selectedTab, setSelectedTab] = useState<Platform>("youtube");
 
   const [touched, setTouched] = useState<TouchedFields>({});
 
   const [showAllErrors, setShowAllErrors] = useState(false);
+
+  const shouldShowAllErrors = showAllErrors || showValidation;
 
   const activePlatform = platforms.includes(selectedTab)
     ? selectedTab
@@ -77,7 +86,7 @@ function ContentStep({ platforms, mediaId, contents, onContentChange }: Props) {
   }
 
   function getError(field: ContentField) {
-    const shouldShow = showAllErrors || touched[activePlatform]?.[field];
+    const shouldShow = shouldShowAllErrors || touched[activePlatform]?.[field];
 
     return shouldShow ? errors[field] : undefined;
   }
@@ -222,13 +231,13 @@ function ContentStep({ platforms, mediaId, contents, onContentChange }: Props) {
               Check content
             </Button>
 
-            {showAllErrors && (
+            {shouldShowAllErrors && (
               <div role="status" className="mt-4 text-xs leading-6">
                 {allValid ? (
                   <p className="flex items-center gap-2 text-success">
                     <CheckCircle2 size={15} />
-                    All selected platforms have valid content. Review will be
-                    available in TASK #12.
+                    All selected platforms have valid content. You can continue
+                    to Review.
                   </p>
                 ) : (
                   <div className="error-note">
