@@ -1,9 +1,8 @@
-function Calendar() {
-  return (
-    <div>
-      <h1>Calendar</h1>
-    </div>
-  );
-}
+import CalendarPage from "@/components/Calendar/CalendarPage";
+import { getIstanbulTodayKey } from "@/lib/calendar";
 
-export default Calendar;
+export default function Calendar() {
+  const initialTodayKey = getIstanbulTodayKey();
+
+  return <CalendarPage initialTodayKey={initialTodayKey} />;
+}
