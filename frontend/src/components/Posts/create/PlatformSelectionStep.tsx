@@ -1,20 +1,34 @@
-import { PlatformBadge, PLATFORMS } from "@/components/layout/PlatformBadge";
-import { StatusBadge } from "@/components/layout/StatusBadge";
-import { SectionTitle } from "@/components/shared";
-import { platformAccounts } from "@/lib/mock-data";
-import { cn } from "@/lib/utils";
-import { Platform } from "@/types/platform/Platform";
 import { Check } from "lucide-react";
+
+import { PlatformBadge, PLATFORMS } from "@/components/layout/PlatformBadge";
+
+import SocialAccountStatus from "@/components/SocialAccounts/SocialAccountStatus";
+
+import { SectionTitle } from "@/components/shared";
+
+import { platformAccounts } from "@/lib/mock-data";
+import { isAccountConnected } from "@/lib/social-accounts";
+import { cn } from "@/lib/utils";
+
+import type { Platform } from "@/types/platform/Platform";
+import type { SocialAccountStatus as AccountStatus } from "@/types/platform/SocialAccountStatus";
 
 type Props = {
   platforms: Platform[];
   onToggle: (platform: Platform) => void;
 };
 
-function PlatformSelectionStep({ platforms, onToggle }: Props) {
+const STATUS_HINTS: Record<AccountStatus, string> = {
+  connected: "",
+  not_connected: "Account not connected",
+  expired: "Connection expired — reconnect required",
+  error: "Connection error — attention required",
+};
+
+export default function PlatformSelectionStep({ platforms, onToggle }: Props) {
   return (
     <section>
-      <SectionTitle> Where should this go?</SectionTitle>
+      <SectionTitle>Where should this go?</SectionTitle>
 
       <p className="mb-6 text-sm text-muted-foreground">
         Select the connected channels for your post.
@@ -22,19 +36,20 @@ function PlatformSelectionStep({ platforms, onToggle }: Props) {
 
       <div className="grid gap-5 md:grid-cols-3">
         {platformAccounts.map((account) => {
+          const connected = isAccountConnected(account);
           const selected = platforms.includes(account.platform);
 
           return (
             <button
               key={account.platform}
               type="button"
-              disabled={!account.connected}
+              disabled={!connected}
               aria-pressed={selected}
               onClick={() => onToggle(account.platform)}
               className={cn(
-                "choice",
+                "choice min-w-0",
                 selected && "selected",
-                !account.connected && "cursor-not-allowed opacity-60",
+                !connected && "cursor-not-allowed opacity-60",
               )}
             >
               <div className="mb-4">
@@ -45,13 +60,19 @@ function PlatformSelectionStep({ platforms, onToggle }: Props) {
                 {PLATFORMS[account.platform].label}
               </h3>
 
-              <p className="mb-5 text-xs text-subtle">
+              <p className="mb-5 wrap-break-word text-xs text-subtle">
                 {account.account || "No account linked"}
               </p>
 
-              <StatusBadge
-                status={account.connected ? "connected" : "not_connected"}
-              />
+              <div>
+                <SocialAccountStatus status={account.status} />
+              </div>
+
+              {!connected && (
+                <p className="mt-3 text-xs leading-5 text-muted-foreground">
+                  {STATUS_HINTS[account.status]}
+                </p>
+              )}
 
               <span className="choice-check" aria-hidden="true">
                 {selected && <Check size={13} />}
@@ -63,5 +84,3 @@ function PlatformSelectionStep({ platforms, onToggle }: Props) {
     </section>
   );
 }
-
-export default PlatformSelectionStep;

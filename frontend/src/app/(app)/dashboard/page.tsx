@@ -1,5 +1,11 @@
-
-import { ArrowUpRight, CheckCircle2, Clock, Plus, Upload, XCircle } from "lucide-react";
+import {
+  ArrowUpRight,
+  CheckCircle2,
+  Clock,
+  Plus,
+  Upload,
+  XCircle,
+} from "lucide-react";
 
 import { Metric } from "@/components/layout/metric";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -7,10 +13,17 @@ import { PLATFORMS, PlatformBadge } from "@/components/layout/PlatformBadge";
 import { StatusBadge } from "@/components/layout/StatusBadge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { activity, channels, metrics, upcoming, user } from "@/lib/mock-data";
+import {
+  activity,
+  metrics,
+  platformAccounts,
+  upcoming,
+  user,
+} from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-
+import SocialAccountStatus from "@/components/SocialAccounts/SocialAccountStatus";
+import { isAccountConnected } from "@/lib/social-accounts";
 
 const TILE: Record<string, string> = {
   lime: "bg-brand",
@@ -56,12 +69,36 @@ function Dashboard() {
 
       {/* Metrics — deliberately unequal hierarchy */}
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
-        <Metric label="Total posts" value={metrics.total} hint="Across all channels" emphasis />
+        <Metric
+          label="Total posts"
+          value={metrics.total}
+          hint="Across all channels"
+          emphasis
+        />
         <div className="grid grid-cols-2 gap-x-6 rounded-lg border border-border bg-card px-2 sm:grid-cols-4">
-          <Metric label="Drafts" value={metrics.drafts} hint="Awaiting review" />
-          <Metric label="Scheduled" value={metrics.scheduled} hint="Next 7 days" tone="info" />
-          <Metric label="Published" value={metrics.published} hint="This month" tone="success" />
-          <Metric label="Failed" value={metrics.failed} hint="Needs attention" tone="destructive" />
+          <Metric
+            label="Drafts"
+            value={metrics.drafts}
+            hint="Awaiting review"
+          />
+          <Metric
+            label="Scheduled"
+            value={metrics.scheduled}
+            hint="Next 7 days"
+            tone="info"
+          />
+          <Metric
+            label="Published"
+            value={metrics.published}
+            hint="This month"
+            tone="success"
+          />
+          <Metric
+            label="Failed"
+            value={metrics.failed}
+            hint="Needs attention"
+            tone="destructive"
+          />
         </div>
       </section>
 
@@ -93,7 +130,9 @@ function Dashboard() {
                     <span
                       className={cn(
                         "size-4 rotate-45",
-                        post.tile === "ink" || post.tile === "indigo" ? "bg-brand" : "bg-ink",
+                        post.tile === "ink" || post.tile === "indigo"
+                          ? "bg-brand"
+                          : "bg-ink",
                       )}
                     />
                   </span>
@@ -120,36 +159,47 @@ function Dashboard() {
         <div className="space-y-10">
           {/* Connected channels */}
           <section>
-            <div className="mb-4 flex items-baseline justify-between border-b border-border pb-3">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-border pb-3">
               <h2 className="editorial text-xl">Channels</h2>
-              <Badge variant="outline">
-                {channels.filter((c) => c.connected).length}/{channels.length}
-              </Badge>
+
+              <div className="flex items-center gap-3">
+                <Badge variant="outline">
+                  {platformAccounts.filter(isAccountConnected).length}/
+                  {platformAccounts.length}
+                </Badge>
+
+                <Link
+                  href="/social-accounts"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-foreground hover:text-brand-2"
+                >
+                  Manage
+                  <ArrowUpRight size={13} />
+                </Link>
+              </div>
             </div>
+
             <ul className="space-y-3">
-              {channels.map((channel) => {
-                const { label, icon: Icon } = PLATFORMS[channel.platform];
+              {platformAccounts.map((account) => {
+                const { label, icon: Icon } = PLATFORMS[account.platform];
+
                 return (
                   <li
-                    key={channel.platform}
-                    className="flex items-center gap-3 rounded-lg border border-border bg-card p-4"
+                    key={account.platform}
+                    className="flex min-w-0 flex-wrap items-center gap-3 rounded-lg border border-border bg-card p-4"
                   >
-                    <span className="flex size-9 items-center justify-center rounded-md border border-border bg-secondary">
+                    <span className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-secondary">
                       <Icon className="size-4" aria-hidden />
                     </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-sm font-semibold">{label}</span>
-                      <span className="block truncate text-xs text-subtle">
-                        {channel.handle ?? "No account linked"}
-                      </span>
-                    </span>
-                    {channel.connected ? (
-                      <StatusBadge status="connected" />
-                    ) : (
-                      <Button variant="brutalDark" size="sm">
-                        Connect
-                      </Button>
-                    )}
+
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-semibold">{label}</p>
+
+                      <p className="truncate text-xs text-subtle">
+                        {account.account || "No account linked"}
+                      </p>
+                    </div>
+
+                    <SocialAccountStatus status={account.status} />
                   </li>
                 );
               })}
@@ -167,10 +217,17 @@ function Dashboard() {
                 return (
                   <li key={item.id} className="relative">
                     <span className="absolute -left-6.75 top-0.5 flex size-4 items-center justify-center rounded-full bg-background">
-                      <Icon className={cn("size-3.5", ACTIVITY_TONE[item.tone])} aria-hidden />
+                      <Icon
+                        className={cn("size-3.5", ACTIVITY_TONE[item.tone])}
+                        aria-hidden
+                      />
                     </span>
-                    <p className="text-sm font-medium leading-snug">{item.message}</p>
-                    <p className="text-xs text-muted-foreground">{item.detail}</p>
+                    <p className="text-sm font-medium leading-snug">
+                      {item.message}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {item.detail}
+                    </p>
                     <p className="mt-0.5 text-xs text-subtle">{item.time}</p>
                   </li>
                 );

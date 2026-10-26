@@ -1,7 +1,9 @@
-import { Platform } from "./Platform";
+
+import type { Platform } from "./Platform";
+import type { SocialAccountStatus } from "./SocialAccountStatus";
 
 export type PlatformAccount = {
   platform: Platform;
-  account?: string | undefined;
-  connected: boolean;
+  account?: string;
+  status: SocialAccountStatus;
 };

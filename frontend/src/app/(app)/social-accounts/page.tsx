@@ -1,9 +1,5 @@
-function SocialAccounts() {
-  return (
-    <div>
-      <h1>Social Accounts</h1>
-    </div>
-  );
-}
+import SocialAccountsPage from "@/components/SocialAccounts/SocialAccountsPage";
 
-export default SocialAccounts;
+export default function SocialAccounts() {
+  return <SocialAccountsPage />;
+}
