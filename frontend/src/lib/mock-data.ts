@@ -3,6 +3,7 @@ import { Platform } from "@/types/platform/Platform";
 import { PlatformAccount } from "@/types/platform/PlatformAccount";
 import { PostRow } from "@/types/post/PostRow";
 import { PostStatus } from "@/types/post/PostStatus";
+import { isAccountConnected } from "@/lib/social-accounts";
 
 export const workspace = {
   name: "Demo Workspace",
@@ -26,9 +27,20 @@ export const metrics = {
 };
 
 export const platformAccounts: PlatformAccount[] = [
-  { platform: "youtube", account: "Ferhan Dev", connected: true },
-  { platform: "tiktok", account: "Ferhan TikTok", connected: true },
-  { platform: "instagram", connected: false },
+  {
+    platform: "youtube",
+    account: "Youtube Channel",
+    status: "connected",
+  },
+  {
+    platform: "tiktok",
+    account: "TikTok Account",
+    status: "connected",
+  },
+  {
+    platform: "instagram",
+    status: "not_connected",
+  },
 ];
 
 export type Channel = {
@@ -39,8 +51,8 @@ export type Channel = {
 
 export const channels: Channel[] = platformAccounts.map((account) => ({
   platform: account.platform,
-  connected: account.connected,
   handle: account.account,
+  connected: isAccountConnected(account),
 }));
 
 export type UpcomingPost = {

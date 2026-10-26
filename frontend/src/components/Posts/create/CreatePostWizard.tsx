@@ -25,6 +25,7 @@ import ReviewStep from "./ReviewStep";
 
 import PublishingStep from "./PublishingStep";
 import { PublishingMode } from "@/types/post/PublishingMode";
+import { isAccountConnected } from "@/lib/social-accounts";
 
 const EMPTY_CONTENT: Content = {
   title: "",
@@ -72,7 +73,7 @@ export default function CreatePostWizard() {
   function togglePlatform(platform: Platform) {
     const account = platformAccounts.find((item) => item.platform === platform);
 
-    if (!account?.connected) return;
+    if (!isAccountConnected(account)) return;
 
     setPlatforms((previous) =>
       previous.includes(platform)
@@ -80,7 +81,6 @@ export default function CreatePostWizard() {
         : [...previous, platform],
     );
 
-    // Keep previously written content in state.
     setError("");
   }
 
@@ -104,11 +104,13 @@ export default function CreatePostWizard() {
   function arePlatformsValid() {
     return (
       platforms.length > 0 &&
-      platforms.every(
-        (platform) =>
-          platformAccounts.find((account) => account.platform === platform)
-            ?.connected === true,
-      )
+      platforms.every((platform) => {
+        const account = platformAccounts.find(
+          (item) => item.platform === platform,
+        );
+
+        return isAccountConnected(account);
+      })
     );
   }
 
