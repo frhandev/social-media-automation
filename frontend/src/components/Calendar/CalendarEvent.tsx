@@ -50,9 +50,19 @@ export default function CalendarEvent({ post, compact = false }: Props) {
           </span>
         </div>
 
-        <p className="mt-1 line-clamp-2 break-words text-[11px] font-semibold leading-[1.35] text-foreground">
+        <p className="mt-1 line-clamp-2 wrap-break-word text-[11px] font-semibold leading-[1.35] text-foreground">
           {post.title}
         </p>
+
+        <div className="mt-2 flex flex-wrap items-center gap-1">
+          {post.platforms.map((platform) => (
+            <PlatformBadge
+              key={platform}
+              platform={platform}
+              showLabel={false}
+            />
+          ))}
+        </div>
       </Link>
     );
   }
@@ -81,12 +91,12 @@ export default function CalendarEvent({ post, compact = false }: Props) {
           />
         </div>
 
-        <h3 className="line-clamp-2 break-words font-display text-sm font-bold leading-5">
+        <h3 className="line-clamp-2 wrap-break-word font-display text-sm font-bold leading-5">
           {post.title}
         </h3>
 
         {post.excerpt && (
-          <p className="mt-2 line-clamp-2 break-words text-xs leading-5 text-muted-foreground">
+          <p className="mt-2 line-clamp-2 wrap-break-word text-xs leading-5 text-muted-foreground">
             {post.excerpt}
           </p>
         )}
