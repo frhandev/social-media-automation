@@ -5,6 +5,7 @@ import { PostRow } from "@/types/post/PostRow";
 import { PostStatus } from "@/types/post/PostStatus";
 import { isAccountConnected } from "@/lib/social-accounts";
 import { PublishingRecord } from "@/types/publishing/PublishingRecord";
+import { AnalyticsDailyRecord } from "@/types/analytics/AnalyticsDailyRecord";
 
 export const workspace = {
   name: "Demo Workspace",
@@ -312,6 +313,34 @@ export const posts: PostRow[] = [
     status: "cancelled",
     mediaId: "m3",
   },
+
+  {
+    id: "p9",
+    title: "Creative workflow — Instagram carousel",
+    excerpt: "Behind the scenes of a visual content workflow.",
+    platforms: ["instagram"],
+    createdAt: "2026-08-07T09:00:00Z",
+    status: "published",
+    mediaId: "m5",
+  },
+  {
+    id: "p10",
+    title: "Building Reliable REST APIs",
+    excerpt: "Practical techniques for maintainable backend APIs.",
+    platforms: ["youtube"],
+    createdAt: "2026-08-25T12:00:00Z",
+    status: "published",
+    mediaId: "m1",
+  },
+  {
+    id: "p11",
+    title: "Coding Habits That Save Time",
+    excerpt: "Short practical tips for cleaner projects.",
+    platforms: ["tiktok"],
+    createdAt: "2026-10-02T09:00:00Z",
+    status: "published",
+    mediaId: "m6",
+  },
 ];
 
 export const publishingRecords: PublishingRecord[] = [
@@ -448,5 +477,246 @@ export const publishingRecords: PublishingRecord[] = [
     platform: "youtube",
     status: "cancelled",
     attempts: [],
+  },
+
+  {
+    id: "pub-p9-instagram",
+    postId: "p9",
+    platform: "instagram",
+    status: "published",
+    publishedAt: "2026-08-12T12:00:00Z",
+    attempts: [
+      {
+        id: "attempt-p9-instagram-1",
+        at: "2026-08-12T12:00:00Z",
+        status: "published",
+      },
+    ],
+  },
+  {
+    id: "pub-p10-youtube",
+    postId: "p10",
+    platform: "youtube",
+    status: "published",
+    publishedAt: "2026-09-10T10:00:00Z",
+    attempts: [
+      {
+        id: "attempt-p10-youtube-1",
+        at: "2026-09-10T10:00:00Z",
+        status: "published",
+      },
+    ],
+  },
+  {
+    id: "pub-p11-tiktok",
+    postId: "p11",
+    platform: "tiktok",
+    status: "published",
+    publishedAt: "2026-10-05T10:00:00Z",
+    attempts: [
+      {
+        id: "attempt-p11-tiktok-1",
+        at: "2026-10-05T10:00:00Z",
+        status: "published",
+      },
+    ],
+  },
+];
+
+export const analyticsDailyRecords: AnalyticsDailyRecord[] = [
+  // p3 — YouTube: published on 28 September
+  {
+    publicationId: "pub-p3-youtube",
+    date: "2026-09-29",
+    views: 800,
+    likes: 75,
+    comments: 6,
+    shares: 4,
+  },
+  {
+    publicationId: "pub-p3-youtube",
+    date: "2026-10-03",
+    views: 1300,
+    likes: 100,
+    comments: 14,
+    shares: 7,
+  },
+  {
+    publicationId: "pub-p3-youtube",
+    date: "2026-10-22",
+    views: 1650,
+    likes: 129,
+    comments: 16,
+    shares: 12,
+  },
+  {
+    publicationId: "pub-p3-youtube",
+    date: "2026-10-26",
+    views: 2100,
+    likes: 178,
+    comments: 20,
+    shares: 13,
+  },
+
+  // p3 — TikTok: same post, different publication
+  {
+    publicationId: "pub-p3-tiktok",
+    date: "2026-09-30",
+    views: 1700,
+    likes: 150,
+    comments: 19,
+    shares: null,
+  },
+  {
+    publicationId: "pub-p3-tiktok",
+    date: "2026-10-09",
+    views: 1900,
+    likes: 180,
+    comments: 18,
+    shares: null,
+  },
+  {
+    publicationId: "pub-p3-tiktok",
+    date: "2026-10-24",
+    views: 2400,
+    likes: 250,
+    comments: 27,
+    shares: null,
+  },
+
+  // p6 — YouTube: published, while Instagram failed
+  {
+    publicationId: "pub-p6-youtube",
+    date: "2026-10-05",
+    views: 1000,
+    likes: 90,
+    comments: 12,
+    shares: 7,
+  },
+  {
+    publicationId: "pub-p6-youtube",
+    date: "2026-10-13",
+    views: 1600,
+    likes: 130,
+    comments: 22,
+    shares: 8,
+  },
+  {
+    publicationId: "pub-p6-youtube",
+    date: "2026-10-21",
+    views: 2300,
+    likes: 210,
+    comments: 38,
+    shares: 16,
+  },
+  {
+    publicationId: "pub-p6-youtube",
+    date: "2026-10-25",
+    views: 2800,
+    likes: 250,
+    comments: 45,
+    shares: 21,
+  },
+
+  // p9 — Instagram: historical data within 90 days
+  {
+    publicationId: "pub-p9-instagram",
+    date: "2026-08-13",
+    views: 400,
+    likes: 26,
+    comments: 4,
+    shares: null,
+  },
+  {
+    publicationId: "pub-p9-instagram",
+    date: "2026-09-14",
+    views: 900,
+    likes: 70,
+    comments: 9,
+    shares: null,
+  },
+  {
+    publicationId: "pub-p9-instagram",
+    date: "2026-10-15",
+    views: 1500,
+    likes: 130,
+    comments: 18,
+    shares: null,
+  },
+  {
+    publicationId: "pub-p9-instagram",
+    date: "2026-10-23",
+    views: 1800,
+    likes: 145,
+    comments: 20,
+    shares: null,
+  },
+
+  // p10 — YouTube
+  {
+    publicationId: "pub-p10-youtube",
+    date: "2026-09-11",
+    views: 0,
+    likes: 0,
+    comments: 0,
+    shares: null,
+  },
+  {
+    publicationId: "pub-p10-youtube",
+    date: "2026-09-20",
+    views: 650,
+    likes: 44,
+    comments: 6,
+    shares: 5,
+  },
+  {
+    publicationId: "pub-p10-youtube",
+    date: "2026-10-08",
+    views: 1700,
+    likes: 120,
+    comments: 16,
+    shares: 15,
+  },
+  {
+    publicationId: "pub-p10-youtube",
+    date: "2026-10-24",
+    views: 2000,
+    likes: 160,
+    comments: 23,
+    shares: 19,
+  },
+
+  // p11 — TikTok
+  {
+    publicationId: "pub-p11-tiktok",
+    date: "2026-10-06",
+    views: 1200,
+    likes: 120,
+    comments: 14,
+    shares: 19,
+  },
+  {
+    publicationId: "pub-p11-tiktok",
+    date: "2026-10-14",
+    views: 2400,
+    likes: 250,
+    comments: 23,
+    shares: 35,
+  },
+  {
+    publicationId: "pub-p11-tiktok",
+    date: "2026-10-21",
+    views: 2800,
+    likes: 300,
+    comments: 29,
+    shares: 45,
+  },
+  {
+    publicationId: "pub-p11-tiktok",
+    date: "2026-10-27",
+    views: 3500,
+    likes: 350,
+    comments: 42,
+    shares: 50,
   },
 ];
