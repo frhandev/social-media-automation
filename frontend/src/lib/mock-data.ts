@@ -6,6 +6,7 @@ import { PostStatus } from "@/types/post/PostStatus";
 import { isAccountConnected } from "@/lib/social-accounts";
 import { PublishingRecord } from "@/types/publishing/PublishingRecord";
 import { AnalyticsDailyRecord } from "@/types/analytics/AnalyticsDailyRecord";
+import { WorkspaceMember } from "@/types/settings/WorkspaceMember";
 
 export const workspace = {
   name: "Demo Workspace",
@@ -19,6 +20,27 @@ export const user = {
   email: "alex@example.com",
   initials: "AM",
 };
+
+export const workspaceMembers: WorkspaceMember[] = [
+  {
+    id: "member-1",
+    name: user.fullName,
+    email: user.email,
+    role: "owner",
+  },
+  {
+    id: "member-2",
+    name: "Jordan Lee",
+    email: "jordan@example.com",
+    role: "admin",
+  },
+  {
+    id: "member-3",
+    name: "Taylor Chen",
+    email: "taylor@example.com",
+    role: "member",
+  },
+];
 
 export const metrics = {
   total: 25,
