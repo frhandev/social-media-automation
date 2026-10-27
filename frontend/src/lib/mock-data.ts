@@ -291,7 +291,7 @@ export const posts: PostRow[] = [
     excerpt: "Record types, pattern matching and more.",
     platforms: ["youtube", "instagram"],
     createdAt: "2026-09-24T11:20:00Z",
-    status: "ready",
+    status: "partial",
     mediaId: "m5",
   },
   {

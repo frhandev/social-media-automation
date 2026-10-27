@@ -1,6 +1,6 @@
 import { PublishingRow } from "@/lib/publishing";
 import { Button } from "../ui/button";
-import Link from "next/dist/client/link";
+import Link from "next/link";
 import { ArrowUpRight, Eye } from "lucide-react";
 import PublicationStatusBadge from "./PublicationStatusBadge";
 import { formatDate } from "@/lib/helperFunctions";
