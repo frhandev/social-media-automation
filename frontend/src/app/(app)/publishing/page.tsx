@@ -1,9 +1,5 @@
-function Publishing() {
-  return (
-    <div>
-      <h1>Publishing</h1>
-    </div>
-  );
-}
+import PublishingPage from "@/components/Publishing/PublishingPage";
 
-export default Publishing;
+export default function Publishing() {
+  return <PublishingPage />;
+}
