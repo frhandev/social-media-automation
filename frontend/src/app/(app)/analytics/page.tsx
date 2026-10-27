@@ -1,9 +1,10 @@
-function Analytics() {
-  return (
-    <div>
-      <h1>Analytics</h1>
-    </div>
-  );
-}
+import AnalyticsPage from "@/components/Analytics/AnalyticsPage";
+import { getIstanbulTodayKey } from "@/lib/calendar";
 
-export default Analytics;
+export const dynamic = "force-dynamic";
+
+export default function Analytics() {
+  const todayKey = getIstanbulTodayKey();
+
+  return <AnalyticsPage todayKey={todayKey} />;
+}
