@@ -4,6 +4,7 @@ import { PlatformAccount } from "@/types/platform/PlatformAccount";
 import { PostRow } from "@/types/post/PostRow";
 import { PostStatus } from "@/types/post/PostStatus";
 import { isAccountConnected } from "@/lib/social-accounts";
+import { PublishingRecord } from "@/types/publishing/PublishingRecord";
 
 export const workspace = {
   name: "Demo Workspace",
@@ -290,7 +291,7 @@ export const posts: PostRow[] = [
     excerpt: "Record types, pattern matching and more.",
     platforms: ["youtube", "instagram"],
     createdAt: "2026-09-24T11:20:00Z",
-    status: "ready",
+    status: "partial",
     mediaId: "m5",
   },
   {
@@ -310,5 +311,142 @@ export const posts: PostRow[] = [
     createdAt: "2026-09-20T10:00:00Z",
     status: "cancelled",
     mediaId: "m3",
+  },
+];
+
+export const publishingRecords: PublishingRecord[] = [
+  {
+    id: "pub-p1-youtube",
+    postId: "p1",
+    platform: "youtube",
+    status: "scheduled",
+    scheduledAt: "2026-10-02T15:00:00Z",
+    attempts: [],
+  },
+  {
+    id: "pub-p2-tiktok",
+    postId: "p2",
+    platform: "tiktok",
+    status: "failed",
+    attempts: [
+      {
+        id: "attempt-p2-tiktok-1",
+        at: "2026-09-28T12:40:00Z",
+        status: "failed",
+        error: "Demo error: media processing was incomplete.",
+      },
+      {
+        id: "attempt-p2-tiktok-2",
+        at: "2026-09-28T12:45:00Z",
+        status: "failed",
+        error: "Demo error: media could not be processed.",
+      },
+      {
+        id: "attempt-p2-tiktok-3",
+        at: "2026-09-28T13:00:00Z",
+        status: "failed",
+        error: "Demo error: media processing failed.",
+      },
+    ],
+  },
+  {
+    id: "pub-p2-instagram",
+    postId: "p2",
+    platform: "instagram",
+    status: "failed",
+    attempts: [
+      {
+        id: "attempt-p2-instagram-1",
+        at: "2026-09-28T12:50:00Z",
+        status: "failed",
+        error: "Demo error: media was unavailable.",
+      },
+    ],
+  },
+  {
+    id: "pub-p3-youtube",
+    postId: "p3",
+    platform: "youtube",
+    status: "published",
+    scheduledAt: "2026-09-28T18:00:00Z",
+    publishedAt: "2026-09-28T18:02:00Z",
+    attempts: [
+      {
+        id: "attempt-p3-youtube-1",
+        at: "2026-09-28T18:02:00Z",
+        status: "published",
+      },
+    ],
+  },
+  {
+    id: "pub-p3-tiktok",
+    postId: "p3",
+    platform: "tiktok",
+    status: "published",
+    scheduledAt: "2026-09-28T18:00:00Z",
+    publishedAt: "2026-09-28T18:04:00Z",
+    attempts: [
+      {
+        id: "attempt-p3-tiktok-1",
+        at: "2026-09-28T18:04:00Z",
+        status: "published",
+      },
+    ],
+  },
+  {
+    id: "pub-p5-tiktok",
+    postId: "p5",
+    platform: "tiktok",
+    status: "queued",
+    scheduledAt: "2026-09-30T12:00:00Z",
+    attempts: [],
+  },
+  {
+    id: "pub-p6-youtube",
+    postId: "p6",
+    platform: "youtube",
+    status: "published",
+    publishedAt: "2026-10-04T15:00:00Z",
+    attempts: [
+      {
+        id: "attempt-p6-youtube-1",
+        at: "2026-10-04T15:00:00Z",
+        status: "published",
+      },
+    ],
+  },
+  {
+    id: "pub-p6-instagram",
+    postId: "p6",
+    platform: "instagram",
+    status: "failed",
+    attempts: [
+      {
+        id: "attempt-p6-instagram-1",
+        at: "2026-10-04T15:01:00Z",
+        status: "failed",
+        error: "Demo error: account authorization was unavailable.",
+      },
+      {
+        id: "attempt-p6-instagram-2",
+        at: "2026-10-04T15:06:00Z",
+        status: "failed",
+        error: "Demo error: authorization must be renewed.",
+      },
+    ],
+  },
+  {
+    id: "pub-p7-tiktok",
+    postId: "p7",
+    platform: "tiktok",
+    status: "publishing",
+    attempts: [],
+  },
+  {
+    id: "pub-p8-youtube",
+    postId: "p8",
+    platform: "youtube",
+    status: "cancelled",
+    attempts: [],
   },
 ];
