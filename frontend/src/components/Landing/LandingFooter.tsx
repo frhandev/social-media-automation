@@ -73,8 +73,22 @@ export default function LandingFooter() {
                   <ArrowUpRight size={15} />
                 </Link>
 
-                <span className="text-sm text-subtle">
-                  Authentication — soon
+                <Link
+                  href="/login"
+                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Sign in
+                </Link>
+
+                <Link
+                  href="/register"
+                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Create account
+                </Link>
+
+                <span className="text-xs leading-5 text-subtle">
+                  Authentication UI preview — backend pending
                 </span>
 
                 <span className="text-sm text-subtle">
