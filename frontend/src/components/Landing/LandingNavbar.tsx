@@ -68,14 +68,12 @@ export default function LandingNavbar() {
 
         {/* Desktop actions */}
         <div className="hidden items-center gap-3 lg:flex">
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            disabled
-            title="Authentication is coming in TASK #20"
-          >
-            Sign in · Soon
+          <Button asChild variant="ghost" size="sm">
+            <Link href="/login">Sign in</Link>
+          </Button>
+
+          <Button asChild variant="outline" size="sm">
+            <Link href="/register">Get started</Link>
           </Button>
 
           <Button asChild variant="brutal" size="sm">
@@ -134,8 +132,16 @@ export default function LandingNavbar() {
               </Link>
             </Button>
 
-            <Button type="button" variant="outline" disabled className="w-full">
-              Sign in — coming soon
+            <Button asChild variant="outline" className="w-full">
+              <Link href="/login" onClick={closeMenu}>
+                Sign in
+              </Link>
+            </Button>
+
+            <Button asChild variant="secondary" className="w-full">
+              <Link href="/register" onClick={closeMenu}>
+                Get started
+              </Link>
             </Button>
           </div>
         </nav>

@@ -43,12 +43,11 @@ export function SidebarNav() {
 
   return (
     <div className="flex h-full flex-col bg-sidebar">
-      <Link href="/dashboard" className="flex h-16 items-center border-b border-sidebar-border px-5">
-        <Image
-          src={logo}
-          alt="SocialFlow AI"
-          priority
-        />
+      <Link
+        href="/dashboard"
+        className="flex h-16 items-center border-b border-sidebar-border px-5"
+      >
+        <Image src={logo} alt="SocialFlow AI" priority />
       </Link>
 
       <div className="border-b border-sidebar-border px-4 py-4">
@@ -128,10 +127,11 @@ export function SidebarNav() {
           </span>
           <Link
             href="/"
-            aria-label="Log out"
-            className="rounded-md p-1.5 text-subtle transition-colors hover:bg-secondary hover:text-destructive"
+            aria-label="Exit demo"
+            title="Exit demo"
+            className="rounded-md p-1.5 text-subtle transition-colors hover:bg-secondary hover:text-foreground"
           >
-            <LogOut className="size-4" />
+            <LogOut className="size-4" aria-hidden="true" />
           </Link>
         </div>
       </div>

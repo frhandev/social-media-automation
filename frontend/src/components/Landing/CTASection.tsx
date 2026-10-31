@@ -57,11 +57,11 @@ export default function CTASection() {
               </Button>
 
               <Link
-                href="#features"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md px-3 text-sm font-semibold text-ink-foreground transition-colors hover:text-brand"
+                href="/register"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-ink-foreground/30 px-5 text-sm font-semibold text-ink-foreground transition-colors hover:border-brand hover:text-brand"
               >
-                Explore features
-                <ArrowRight size={16} />
+                Get started
+                <ArrowRight size={16} aria-hidden="true" />
               </Link>
             </div>
 
@@ -69,8 +69,9 @@ export default function CTASection() {
               <CheckCircle2 size={16} className="mt-1 shrink-0 text-brand" />
 
               <p>
-                No login required for the frontend demo. Real publishing and
-                account integration will be added in later development phases.
+                Explore the frontend demo without an account. Sign-in and
+                registration forms are UI previews. Real authentication and
+                publishing require backend integration.
               </p>
             </div>
           </div>
