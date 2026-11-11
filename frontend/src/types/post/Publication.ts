@@ -1,5 +1,5 @@
 import { Channel } from "../Channel";
-import { Attempt } from "./Attemp";
+import { Attempt } from "./Attempt";
 import { PostLifecycle } from "./PostLifecycle";
 
 export type Publication = {

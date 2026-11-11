@@ -9,7 +9,11 @@ import {
 } from "lucide-react";
 
 import { StatusBadge } from "@/components/layout/StatusBadge";
-import { metrics, posts } from "@/lib/mock-data";
+import { posts } from "@/lib/mock-data";
+import { getDashboardMetrics } from "@/lib/dashboard";
+
+
+const metrics = getDashboardMetrics(posts);
 
 const PREVIEW_METRICS = [
   { label: "Total posts", value: metrics.total },

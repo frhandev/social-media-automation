@@ -1,12 +1,11 @@
 import MediaItem from "@/types/media/MediaItem";
-import { Platform } from "@/types/platform/Platform";
 import { PlatformAccount } from "@/types/platform/PlatformAccount";
 import { PostRow } from "@/types/post/PostRow";
-import { PostStatus } from "@/types/post/PostStatus";
 import { isAccountConnected } from "@/lib/social-accounts";
 import { PublishingRecord } from "@/types/publishing/PublishingRecord";
 import { AnalyticsDailyRecord } from "@/types/analytics/AnalyticsDailyRecord";
 import { WorkspaceMember } from "@/types/settings/WorkspaceMember";
+import { Channel } from "@/types/Channel";
 
 export const workspace = {
   name: "Demo Workspace",
@@ -42,14 +41,6 @@ export const workspaceMembers: WorkspaceMember[] = [
   },
 ];
 
-export const metrics = {
-  total: 25,
-  drafts: 4,
-  scheduled: 5,
-  published: 17,
-  failed: 3,
-};
-
 export const platformAccounts: PlatformAccount[] = [
   {
     platform: "youtube",
@@ -67,114 +58,11 @@ export const platformAccounts: PlatformAccount[] = [
   },
 ];
 
-export type Channel = {
-  platform: Platform;
-  handle?: string;
-  connected: boolean;
-};
-
 export const channels: Channel[] = platformAccounts.map((account) => ({
   platform: account.platform,
   handle: account.account,
   connected: isAccountConnected(account),
 }));
-
-export type UpcomingPost = {
-  id: string;
-  title: string;
-  platforms: Platform[];
-  date: string;
-  time: string;
-  status: PostStatus;
-  tile: "lime" | "ink" | "indigo" | "sand";
-};
-
-export const upcoming: UpcomingPost[] = [
-  {
-    id: "1",
-    title: "C# Backend Architecture",
-    platforms: ["youtube"],
-    date: "Today",
-    time: "20:00",
-    status: "scheduled",
-    tile: "ink",
-  },
-  {
-    id: "2",
-    title: "Clean Code in 60 Seconds",
-    platforms: ["tiktok", "instagram"],
-    date: "Tomorrow",
-    time: "09:30",
-    status: "scheduled",
-    tile: "lime",
-  },
-  {
-    id: "3",
-    title: "Behind the Studio — Week 14",
-    platforms: ["instagram"],
-    date: "Thu 2 Oct",
-    time: "18:15",
-    status: "draft",
-    tile: "sand",
-  },
-  {
-    id: "4",
-    title: "Postgres Indexing Deep Dive",
-    platforms: ["youtube", "instagram"],
-    date: "Fri 3 Oct",
-    time: "11:00",
-    status: "scheduled",
-    tile: "indigo",
-  },
-  {
-    id: "5",
-    title: "Design Systems for Solo Devs",
-    platforms: ["instagram"],
-    date: "Sat 4 Oct",
-    time: "13:45",
-    status: "failed",
-    tile: "ink",
-  },
-];
-
-export type Activity = {
-  id: string;
-  message: string;
-  detail: string;
-  time: string;
-  tone: "success" | "error" | "info" | "neutral";
-};
-
-export const activity: Activity[] = [
-  {
-    id: "a1",
-    message: "YouTube publication succeeded",
-    detail: "Dependency Injection Explained",
-    time: "12 min ago",
-    tone: "success",
-  },
-  {
-    id: "a2",
-    message: "Instagram publication failed",
-    detail: "Token expired — reconnect the account",
-    time: "1 h ago",
-    tone: "error",
-  },
-  {
-    id: "a3",
-    message: "Post scheduled for tomorrow",
-    detail: "Clean Code in 60 Seconds · 09:30",
-    time: "3 h ago",
-    tone: "info",
-  },
-  {
-    id: "a4",
-    message: "Media uploaded",
-    detail: "4 files added to the library",
-    time: "Yesterday",
-    tone: "neutral",
-  },
-];
 
 // ---------- Media Library (Phase 2) ----------
 
@@ -255,6 +143,20 @@ export const mediaItems: MediaItem[] = [
     status: "ready",
     tone: "indigo",
   },
+
+  {
+    id: "m7",
+    filename: "product-demo-final.mp4",
+    type: "video",
+    format: "MP4",
+    durationSec: 142,
+    width: 1920,
+    height: 1080,
+    sizeBytes: 128_000_000,
+    uploadedAt: "2026-09-28T17:30:00Z",
+    status: "ready",
+    tone: "indigo",
+  },
 ];
 
 // ---------- Posts (Phase 3) ----------
@@ -287,7 +189,7 @@ export const posts: PostRow[] = [
     createdAt: "2026-09-27T09:15:00Z",
     scheduledAt: "2026-09-28T18:00:00Z",
     status: "published",
-    mediaId: "m3",
+    mediaId: "m7",
   },
   {
     id: "p4",
