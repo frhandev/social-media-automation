@@ -1,7 +1,8 @@
 import { ScheduleErrors } from "@/types/ScheduleErrors";
 import { ScheduleValidation } from "@/types/ScheduleValidation";
+import { CALENDAR_TIME_ZONE } from "./calendar";
 
-export const PUBLISHING_TIME_ZONE = "Europe/Istanbul";
+export const PUBLISHING_TIME_ZONE = CALENDAR_TIME_ZONE;
 
 function getTimezoneOffsetMinutes(instantMs: number): number | null {
   const formatter = new Intl.DateTimeFormat("en-US", {
