@@ -1,62 +1,72 @@
-# SocialFlow AI — Frontend Audit
+# SocialFlow AI — Frontend Audit (Post-Refinement Review)
 
-**Reviewed repository:** `frhandev/social-media-automation`  
-**Reviewed ref:** `main` (`1fbf4319f11f`, as observed on 2026-11-11)  
-**Refinement branch:** `feature/frontend-refinement` (same SHA when inspected)  
-**Audit date:** 2026-11-11  
-**Scope:** Read-only source inspection of Frontend modules; no edits were made to GitHub.  
-**Verification:** Browser walkthroughs, TypeScript, ESLint and production build are **not run**. No issue is labelled `Fixed` until code changes and verification are completed.
+**Repository:** `frhandev/social-media-automation`  
+**Review date:** 2026-11-11 (Europe/Istanbul)  
+**Base branch:** `main` — `1fbf4319f11f0d8fc592ef5351d7ac13d6c9a731`  
+**Reviewed branch:** `feature/frontend-refinement` — `7cf1d382a8aef9b3cd9ee9156b4ab6dbdf05e2da`  
+**Comparison:** **2 commits ahead, 0 behind** `main` at review time.  
+**Source:** [Compare main...feature/frontend-refinement](https://github.com/frhandev/social-media-automation/compare/main...feature/frontend-refinement)  
+**Audit scope:** Comparison of the original issues with the updated branch code. This document replaces the initial *pre-fix, read-only inspection* snapshot with a **post-refinement code review**. The repository was inspected without executing the application or modifying GitHub.
+
+## Evidence and status definitions
+
+- **Fixed in code — verification pending:** The corresponding change is present in source, but relevant local commands and/or browser behavior have **not** been verified.
+- **Partially fixed in code — verification pending:** Only part of the proposed cleanup is implemented; the residual detail is documented below.
+- **Open / deferred:** Still present in source and intentionally not changed during this limited refinement.
+- **Observed safeguard — test pending:** Existing protective behavior was found in source. Its runtime behavior remains untested.
+- **Not run:** No local or browser test outcome has been supplied or independently observed. Do **not** interpret this as passing.
+
+The review is anchored to commit `7cf1d382a8aef9b3cd9ee9156b4ab6dbdf05e2da`. A subsequent commit (including a documentation-only commit) requires the reviewed-head field to be updated; do not silently reuse the old SHA for a newer revision.
 
 ## Findings and resolutions
 
-| ID | Issue / Evidence | Severity | Proposed resolution | Status |
+| ID | Issue / original finding | Severity | Implemented resolution or remaining work | Status |
 |---|---|---|---|---|
-| FE-01 | `lib/mock-data.ts` exports hardcoded Dashboard `metrics` (25 total), but `posts` contains 11 posts; `dashboard/page.tsx` and `Landing/DashboardPreview.tsx` consume the hardcoded values | High | Derive *post* metrics from `posts`, with explicit status scopes; distinguish from counts of 13 *platform publications* | Open — source confirmed |
-| FE-02 | `mock-data.ts` `upcoming` is a separate list with `Today`, `Tomorrow` and stale October dates, unrelated to actual posts | High | Derive future scheduled/queued posts from `posts`, filter `scheduledAt > now`, format explicitly in `Europe/Istanbul` and display an empty state when none exist | Open — source confirmed |
-| FE-03 | Dashboard `activity` describes actions as '12 min ago', '1 h ago', etc., independently of dated publishing records | Medium | Use a publication-backed recent history with absolute timestamps, or identify the panel as illustrative mock activity and remove misleading relative time wording | Open — source confirmed |
-| FE-04 | `AppSidebar.tsx` matches nav paths with equality only; `/posts/new` and `/posts/[id]` do not highlight Posts | Medium | Match exact segment boundaries: `pathname === to || pathname.startsWith(to + '/')` | Open — source confirmed |
-| FE-05 | `AppSidebar.tsx` workspace dropdown shows selectable workspaces but has no switching behavior | Medium | Replace with read-only current workspace preview or disabled switching controls | Open — source confirmed |
-| FE-06 | `Topbar.tsx` displays functional-looking Search and Notifications buttons without connected handlers; post details fallback title is Dashboard | Medium | Disable/remove unsupported controls; add nested-route title handling | Open — source confirmed |
-| FE-07 | `Topbar.tsx` does not close mobile `Sheet` when a Sidebar link is clicked | Medium | Pass an `onNavigate` callback to `SidebarNav` and close Sheet on navigation | Open — source confirmed |
-| FE-08 | `Media/media-library.tsx` and `Media/UploadArea.tsx` allow choosing files and dismiss the upload dialog without persisting media; retry processing is an inert button | High | Disable upload/retry with explicit backend-required language; do not call mock `onDone` or imply success | Open — source confirmed |
-| FE-09 | Media Library exposes query-string-based fake loading/error/empty states (`?state=` and a timer) | Low | Remove artificial loading/error simulation from default functionality; keep genuine filter-derived empty state | Open — source confirmed |
-| FE-10 | Published post `p3` refers to failed media `m3`, while failed-media sample is needed for Media UI | Medium | Add a distinct ready demo asset for `p3`, retain `m3` as failed fixture, and update `p3.mediaId` | Open — source confirmed |
-| FE-11 | `types/post/Attemp.ts` filename is misspelled; `types/post/Publication.ts` and `types/publishing/PublishAttempt.ts` import it | Low | Rename to `Attempt.ts` and update all repository imports after searching for other consumers | Open — source confirmed |
-| FE-12 | `Channel` is defined both in `types/Channel.ts` and inline in `lib/mock-data.ts` | Low | Import and re-export canonical `Channel` type from `types/Channel.ts` (or remove obsolete projection if unused) | Open — source confirmed |
-| FE-13 | Post statuses, account connection statuses, and media statuses are mixed in `types/post/PostStatus.ts`/`StatusBadge.tsx` | Low | Remove truly redundant types only after repo-wide usage search. Avoid large lifecycle refactors | Open — review required |
-| FE-14 | `lib/scheduling.ts`, `lib/publishing.ts`, `lib/calendar.ts`, `lib/helperFunctions.tsx` repeat the literal `Europe/Istanbul`; Posts date filter uses `en-CA` locale output | Medium | Reuse `CALENDAR_TIME_ZONE`; use explicit timezone parts/`istanbulDateKey` for canonical `YYYY-MM-DD` keys | Open — source confirmed |
-| FE-15 | `analytics.ts` filters to `publication.status === 'published'`, requires publication timestamp, and groups by `publicationId` | Informational | Preserve filtering; test that failed/queued/scheduled publication IDs produce no analytics | Observed in source — tests pending |
-| FE-16 | `CreatePostWizard.tsx` checks ready media and connected account status, and disables final publishing action | Informational | Preserve existing safeguards; test workflow across all five steps | Observed in source — browser test pending |
-| FE-17 | `/posts/[id]` has a 'Post not found' state and Media missing fallback | Informational | Preserve current fallbacks; test direct invalid routes, failed media, and keyboard navigation | Observed in source — browser test pending |
+| FE-01 | Hardcoded Dashboard `metrics` did not match 11 `posts` | High | Added `lib/dashboard.ts#getDashboardMetrics(posts)`; Dashboard and Landing `DashboardPreview` now derive post counts from `posts`, while Dashboard explicitly distinguishes platform publication records | **Fixed in code — verification pending** |
+| FE-02 | Independent `upcoming` records used `Today`/`Tomorrow` and stale fixed dates | High | `getUpcomingPosts()` filters `scheduled`/`queued` posts with valid `scheduledAt > now`; Dashboard formats timestamps and renders `No upcoming posts` when empty; route has `force-dynamic` | **Fixed in code — verification pending** |
+| FE-03 | Relative 'Recent activity' text was unrelated to publication dates | Medium | `getRecentPublishingActivity()` now derives entries and absolute timestamps from successful/failed publishing records and related posts | **Fixed in code — verification pending** |
+| FE-04 | Nested `/posts/new` and `/posts/[id]` did not activate Posts in Sidebar | Medium | `AppSidebar.tsx` uses `pathname === href || pathname.startsWith(href + '/')` and sets `aria-current` | **Fixed in code — manual verification pending** |
+| FE-05 | Nonfunctional Switch Workspace dropdown appeared operational | Medium | `AppSidebar.tsx` replaces the dropdown with a read-only current workspace panel labelled `Switching unavailable` | **Fixed in code — verification pending** |
+| FE-06 | Topbar Search/Notifications buttons had no behavior; post details title fell back to Dashboard | Medium | Unsupported buttons were removed; `getPageTitle()` handles `/posts/new` and `/posts/…` | **Fixed in code — verification pending** |
+| FE-07 | Mobile Sheet did not close when its navigation link was selected | Medium | `SidebarNav` now accepts `onNavigate`; Topbar passes `() => setOpen(false)` to it | **Fixed in code — manual verification pending** |
+| FE-08 | File selection appeared to upload, and Retry Processing was inert | High | Active `media-library.tsx` disables Upload and Retry and labels backend dependency; old `UploadArea.tsx` still exists in the repository, but is not used by the revised Media Library | **Fixed in active UI — manual verification pending** |
+| FE-09 | Media Library simulated loading/errors via query params and timer | Low | Revised `media-library.tsx` removes `?state=` simulation and timer; retains real filter-derived empty state | **Fixed in code — verification pending** |
+| FE-10 | Published `p3` referenced failed media fixture `m3` | Medium | Added ready demo media fixture `m7`, changed `p3.mediaId` to `m7`; retained failed `m3` for testing | **Fixed in code — verification pending** |
+| FE-11 | `Attemp.ts` filename typo and imports | Low | File renamed to `Attempt.ts`; `Publication.ts` and `PublishAttempt.ts` imports point to corrected path | **Fixed in code — verification pending** |
+| FE-12 | Duplicate inline and shared `Channel` types | Low | `mock-data.ts` now imports `Channel` from `types/Channel.ts` instead of redefining the type | **Fixed in code — verification pending** |
+| FE-13 | Mixed Post/Media/Social Account statuses and overlapping lifecycle types | Low | `PostStatus.ts` still includes `connected`/`not_connected`; `PostLifecycle.ts` still includes `ready`/`processing`; `StatusBadge` joins multiple status unions. No broad refactor performed | **Open / deferred** |
+| FE-14 | Repeated timezone constants and inconsistent date-key formatting | Medium | `helperFunctions.tsx` and `scheduling.ts` now reuse `CALENDAR_TIME_ZONE`; `dateKey()` explicitly builds `YYYY-MM-DD` from timezone parts. **Remaining:** `lib/publishing.ts` still declares its own `PUBLISHING_TIME_ZONE = "Europe/Istanbul"` and date-key helper | **Partially fixed in code — verification pending** |
+| FE-15 | Analytics must exclude unsuccessful platform publications | Informational | `lib/analytics.ts#filterAnalyticsRecords()` requires `publication.status === "published"` and a valid publication timestamp. Preserve this rule | **Observed safeguard — test pending** |
+| FE-16 | Wizard must reject unready media and unconnected platforms; publishing must be inert | Informational | Source checks `media.status === "ready"`, `isAccountConnected()` and disables final Publish button | **Observed safeguard — browser test pending** |
+| FE-17 | Unknown post ID and missing media need safe fallbacks | Informational | `PostDetails.tsx` has `Post not found` with `Back to posts`, and a missing-media fallback | **Observed safeguard — browser test pending** |
 
-## Source data snapshot
+### Residuals / non-blocking follow-up decisions
 
-- `posts`: **11 unique posts** (not 25).
-- `publishingRecords`: **13 platform-level publication records** (not 13 posts).
-- Post statuses: draft 1, scheduled 1, queued 1, publishing 1, published 4, failed 1, partial 1, cancelled 1.
-- Platform publication statuses: scheduled 1, queued 1, publishing 1, published 6, failed 3, cancelled 1.
-- At audit date (2026-11-11), the existing `posts` data has **no future `scheduledAt`**. A correct Upcoming panel would therefore show an empty state unless fixture dates are intentionally revised.
-- `p6` legitimately has a published YouTube publication and a failed Instagram publication, with overall `partial` status.
-- Current Analytics fixtures are historical. An empty Last 7 Days view on 2026-11-11 is expected unless genuinely new mock records are added.
+1. **FE-13:** Do not mark this fixed. Untangle PostLifecycle, MediaStatus, connection status, and shared badge types during a deliberately scoped types cleanup, not as an undocumented change to this branch.
+2. **FE-14:** The user-requested timezone normalization is **partial**, not complete. `lib/publishing.ts` retains a literal timezone and its own date-key formatter. This is not itself evidence of an incorrect displayed time, but the duplication remains. Verify midnight-boundary cases before choosing to defer the cleanup.
+3. **FE-08:** Legacy `UploadArea.tsx` remains in the branch. Its existence does not prove that active Media Library performs an upload; nevertheless, delete or clearly retire it in a subsequent scoped cleanup once all imports are checked.
+4. **Historical publishing statuses:** Some fixture `scheduled`/`queued` timestamps are in the past; `Upcoming` correctly excludes them. Calendar may continue displaying historical recorded schedules. Any future refresh of fixtures should keep Post and Publication state aligned.
 
-## User-flow test matrix — NOT YET EXECUTED
+## Source data snapshot at reviewed commit
 
-| Flow | Expected route sequence and behavior | Status |
-|---|---|---|
-| Public | `/` → `/register` → `/login` → `/forgot-password` → `/login` | Not run |
-| Content | `/dashboard` → `/media` → `/posts/new` → Review → Publishing step; final publish disabled | Not run |
-| Management | `/posts` → `/posts/p6` → `/calendar` → `/publishing` → `/analytics` | Not run |
-| Navigation | `/posts/new` and `/posts/p6` highlight Posts, mobile Sheet closes on link | Not run |
-| Unknown post | `/posts/not-found` renders an appropriate empty/error state | Not run |
-| Data boundaries | Select `m3` (failed) and Instagram (not connected) in wizard | Not run |
-| Date boundary | `2026-10-22T22:30:00Z` should map to `2026-10-23` in Istanbul | Not run |
-| Analytics | Failed publication is excluded; 7/30/90 days filter; `shares: null` is not a measured zero | Not run |
-| Responsive | 375px, 768px, 1440px: calendar, charts, table, forms, navigation | Not run |
-| Accessibility | Tab/Shift+Tab/Enter/Space, focus styles, Escape closes Radix dialogs | Not run |
+| Data source | Source-backed observation |
+|---|---|
+| `posts` | 11 unique Post records; draft 1, scheduled 1, queued 1, publishing 1, published 4, failed 1, partial 1, cancelled 1 |
+| `publishingRecords` | 13 platform-specific publication records; scheduled 1, queued 1, publishing 1, published 6, failed 3, cancelled 1 |
+| `platformAccounts` | 2 connected (`youtube`, `tiktok`), 1 not connected (`instagram`) |
+| `p6` | `partial`: YouTube publication succeeded; Instagram publication failed |
+| `p3` | `published` and now references ready media fixture `m7` |
+| `upcoming` | As of **2026-11-11**, no future scheduled/queued `scheduledAt` exists in current fixtures; the Dashboard should show its empty state |
+| Analytics | Illustrative historical daily records, not real social-media performance. With the current fixture dates, **Last 7 Days** on 2026-11-11 is expected to be empty; do not fabricate records merely to fill charts |
+| Counts | Post counts and per-platform Publication counts are different measures and must never be treated as interchangeable |
 
-## Quality gate — NOT YET EXECUTED
+All source observations above are **code-review findings**, not verified browser output.
 
-From `frontend`:
+## Quality gates — NOT RUN
+
+No successful local test output was provided for the reviewed commit. GitHub's connected commit-status query returned **no statuses**, and the commit workflow-run query returned **no PR workflow runs**; absence of results is **not** a passing test.
+
+Run these commands **locally** from `frontend/` and record their real outcomes:
 
 ```bash
 npx tsc --noEmit
@@ -64,15 +74,62 @@ npm run lint
 npm run build
 ```
 
-From repository root:
+Then, from the repository root:
 
 ```bash
 git diff --check
 git status
 ```
 
-All failed checks and screenshots of actual regressions should be logged here with paths and reproduction steps. After fixes and manual/browser tests, change each verified row from `Open` to `Fixed — verified`, include the commit SHA, and record the test outcome. Do **not** mark issues fixed based solely on proposed code.
+| Gate | Result | Evidence / executed at |
+|---|---|---|
+| `npx tsc --noEmit` | **Not run** | To be filled from local output |
+| `npm run lint` | **Not run** | To be filled from local output |
+| `npm run build` | **Not run** | To be filled from local output |
+| `git diff --check` | **Not run** | To be filled from local output |
+| Browser console / hydration | **Not run** | To be filled from browser inspection |
 
-## Out of scope
+Only replace `Not run` with `Passed` or `Failed` when a real test is executed, and record the date, environment, command and any failure output.
 
-No API calls, actual OAuth, JWT, cookies/sessions, database persistence, actual upload, real publishing/retry, fabricated loading timers, or automation of social network accounts should be implemented in this Frontend refinement task.
+## Manual user-flow and regression matrix — NOT RUN
+
+| Test ID | Procedure / reproducible steps | Expected result | Actual result |
+|---|---|---|---|
+| UF-01 Public | Open `/`, select Get Started, go `/register` → `/login` → `/forgot-password` → `/login` | Links resolve; client-side validation only; no fabricated authentication | **Not run** |
+| UF-02 Content | `/dashboard` → `/media` → `/posts/new`; select ready media and connected platform; complete content → Review → Publishing Step | Back/Next navigation works; final Publish disabled; no API calls | **Not run** |
+| UF-03 Management | `/posts` → `/posts/p6`; follow links to `/calendar`, `/publishing`, `/analytics` | Post and platform publication states remain consistent | **Not run** |
+| UF-04 Nested active nav | Directly open `/posts/new`, then `/posts/p6` | Posts highlighted and `aria-current=page` set in Sidebar | **Not run** |
+| UF-05 Mobile Sheet | Use 375px viewport; open menu, choose Posts or Settings | Drawer closes and selected page is displayed | **Not run** |
+| UF-06 Workspace | Open Sidebar workspace block | No actionable workspace-switching menu; clear demo-only message | **Not run** |
+| UF-07 Media upload/retry | Visit `/media`; open a failed-media details modal | Upload and retry disabled; no 'upload succeeded' or 'processing succeeded' claim | **Not run** |
+| UF-08 Upcoming | Visit `/dashboard` with 2026-11-11 reference; separately test a valid future scheduled fixture locally | No stale 'Today' entries; empty state by default; future items sorted | **Not run** |
+| UF-09 Unknown/missing data | Visit `/posts/does-not-exist`, select no-result media/post filters | Appropriate fallback and clear/back links | **Not run** |
+| UF-10 Wizard validation | Attempt to select failed `m3` and not-connected Instagram; then try ready media / connected platform | Invalid selections blocked; valid route reaches Review | **Not run** |
+| UF-11 Analytics | Compare all/YouTube/TikTok/Instagram, 7/30/90 days; check a failed publication | No analytics for failed publication; zero views and null shares handled; historical-data empty states work | **Not run** |
+| UF-12 Midnight boundary | Test `2026-10-22T22:30:00Z` in calendar, post-date filter and publishing filter | Date key `2026-10-23` in `Europe/Istanbul`, irrespective of browser device timezone | **Not run** |
+| UF-13 Responsive | Check 375px, 768px, 1440px for forms, charts, calendar, tables and modal | No horizontal overflow; usable controls | **Not run** |
+| UF-14 A11y | Use Tab, Shift+Tab, Enter, Space; close Radix dialogs with Escape | Keyboard focus visible and dialogs close predictably | **Not run** |
+
+### How to log a genuine failure
+
+Record **test ID**, full route, viewport and browser, steps, expected/actual outcome, console or terminal error, and the resulting follow-up commit. Example structure:
+
+```text
+Test ID: UF-05
+Environment: [browser/version], 375px
+Steps: [exact steps actually followed]
+Expected: [expected navigation and Sheet behavior]
+Actual: [observed result, not a guess]
+Evidence: [console output or screenshot reference]
+Status: Failed / Retest pending
+```
+
+Do not populate failure logs with imagined bugs or invented screenshots.
+
+## Completion rule / merge gate
+
+**Current decision: NOT READY TO CLAIM VERIFIED.** Most changes are present in source, but the audit is not equivalent to QA sign-off. Keep FE-13 deferred and FE-14 partial until separately resolved or explicitly accepted as follow-up. A clean local TypeScript, lint and build result plus the critical user-flow checks should be entered before declaring TASK #21 complete or merging it.
+
+## Scope boundaries
+
+This refinement does **not** implement real OAuth, authentication, database storage, media upload, automatic publishing, retries, platform analytics APIs, or AI functionality. Screens remain sample-data previews where backend integration is not yet available.
