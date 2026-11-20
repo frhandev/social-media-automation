@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SocialFlow.Infrastructure\SocialFlow.Infrastructure.csproj" />
+    <ProjectReference Include="..\SocialFlow.Application\SocialFlow.Application.csproj" />
   </ItemGroup>
 
 </Project>

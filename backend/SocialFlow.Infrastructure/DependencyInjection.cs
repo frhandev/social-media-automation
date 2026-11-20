@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SocialFlow.Infrastructure.Configuration;
 using SocialFlow.Infrastructure.Identity;
 using SocialFlow.Infrastructure.Persistence;
 
@@ -20,6 +21,14 @@ public static class DependencyInjection
         services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+
+        services.AddOptions<DatabaseOptions>()
+            .Bind(configuration.GetSection("ConnectionStrings"))
+            .Validate(
+                options => !string.IsNullOrWhiteSpace(options.ConnectionString),
+                "Connection string cannot be null or empty."
+            )
+            .ValidateOnStart();
 
         return services;
     }
