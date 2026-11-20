@@ -1,2 +1,7 @@
 <Solution>
+  <Project Path="SocialFlow.API/SocialFlow.API.csproj" />
+  <Project Path="SocialFlow.Application/SocialFlow.Application.csproj" />
+  <Project Path="SocialFlow.Domain/SocialFlow.Domain.csproj" />
+  <Project Path="SocialFlow.Infrastructure/SocialFlow.Infrastructure.csproj" />
+  <Project Path="SocialFlow.Tests/SocialFlow.Tests.csproj" />
 </Solution>
