@@ -1,7 +1,9 @@
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SocialFlow.Infrastructure.Configuration;
 using SocialFlow.Infrastructure.Identity;
 using SocialFlow.Infrastructure.Persistence;
@@ -10,25 +12,37 @@ namespace SocialFlow.Infrastructure.DependencyInjection;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection") 
-                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+        services.AddOptions<DatabaseOptions>()
+            .Bind(configuration.GetSection(
+                DatabaseOptions.SectionName))
+            .Validate(
+                options => !string.IsNullOrWhiteSpace(
+                    options.DefaultConnection),
+                "DefaultConnection is required.")
+            .ValidateOnStart();
 
-        services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(connectionString));
+        var connectionString =
+            configuration.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException(
+                "DefaultConnection is missing.");
 
-        services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
+        services.AddDbContext<ApplicationDbContext>(
+            options => options.UseNpgsql(connectionString));
+
+        services
+            .AddIdentity<ApplicationUser, IdentityRole<Guid>>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-        services.AddOptions<DatabaseOptions>()
-            .Bind(configuration.GetSection("ConnectionStrings"))
-            .Validate(
-                options => !string.IsNullOrWhiteSpace(options.ConnectionString),
-                "Connection string cannot be null or empty."
-            )
-            .ValidateOnStart();
+        services.AddHealthChecks()
+            .AddDbContextCheck<ApplicationDbContext>(
+                name: "postgresql",
+                failureStatus: HealthStatus.Unhealthy,
+                tags: ["ready"]);
 
         return services;
     }
