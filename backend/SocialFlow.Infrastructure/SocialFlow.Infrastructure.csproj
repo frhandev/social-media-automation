@@ -17,4 +17,9 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SocialFlow.Application\SocialFlow.Application.csproj" />
+    <ProjectReference Include="..\SocialFlow.Domain\SocialFlow.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

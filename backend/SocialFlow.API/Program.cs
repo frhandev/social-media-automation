@@ -17,7 +17,7 @@ builder.Services.AddProblemDetails(options =>
 
         problem.Instance ??= context.HttpContext.Request.Path.Value;
 
-        if (!problem.Extensions.ContainsKey("traceId") is false)
+        if (!problem.Extensions.ContainsKey("traceId"))
         {
             problem.Extensions["traceId"] = Activity.Current?.Id ?? context.HttpContext.TraceIdentifier;
         }
@@ -42,6 +42,9 @@ builder.Services.AddProblemDetails(options =>
 });
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddAuthorization();
+builder.Services.AddControllers();
+
+
 var app = builder.Build();
 
 app.UseExceptionHandler();
@@ -66,6 +69,7 @@ if(app.Environment.IsDevelopment())
         });
 }
 
+app.MapControllers();
 
 app.Run();
 
