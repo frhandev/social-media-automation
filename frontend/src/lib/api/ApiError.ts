@@ -1,4 +1,4 @@
-import { ProblemDetails } from "./types";
+import type { ProblemDetails } from "./types";
 
 export class ApiError extends Error {
   constructor(
