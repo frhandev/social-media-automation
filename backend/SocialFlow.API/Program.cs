@@ -50,7 +50,11 @@ var app = builder.Build();
 app.UseExceptionHandler();
 app.UseStatusCodePages();
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -60,7 +64,7 @@ app.MapHealthChecks("/api/v1/health/live",
         Predicate = _ => false
     });
 
-if(app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
     app.MapHealthChecks("/api/v1/health/ready",
         new HealthCheckOptions
